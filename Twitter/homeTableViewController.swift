@@ -41,6 +41,12 @@ class homeTableViewController: UITableViewController {
         tableView.refreshControl = myrefreshControl
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("Entry")
+        self.pullTweets()
+    }
+    
     @IBAction func onLogout(_ sender: Any) {
         TwitterAPICaller.client?.logout()
         self.dismiss(animated: true, completion: nil)
@@ -60,6 +66,10 @@ class homeTableViewController: UITableViewController {
         if let imageData = data {
             cell.profileImage.image = UIImage(data: imageData)
         }
+        
+        cell.setFavorite(tweets[indexPath.row]["favorited"] as! Bool)
+        cell.tweetId = tweets[indexPath.row]["id"] as! Int
+        cell.retweeted(tweets[indexPath.row]["retweeted"] as! Bool)
         
         return cell
     }
