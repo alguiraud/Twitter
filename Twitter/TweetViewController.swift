@@ -8,9 +8,10 @@
 
 import UIKit
 
-class TweetViewController: UIViewController {
+class TweetViewController: UIViewController, UITextViewDelegate {
 
     @IBOutlet weak var tweetTextField: UITextView!
+    @IBOutlet weak var tweetCount: UILabel!
     
     @IBAction func cancel(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -33,17 +34,19 @@ class TweetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tweetTextField.delegate = self
         tweetTextField.becomeFirstResponder()
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let characterLimit = 280
+        let newText = NSString(string: tweetTextField.text!).replacingCharacters(in: range, with: text)
+        
+        let textCount = newText.count > 280 ? 280 : newText.count
+        
+        tweetCount.text = String(textCount)
+        
+        return newText.count <= characterLimit
     }
-    */
-
+    
 }
